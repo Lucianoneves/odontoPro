@@ -1,7 +1,28 @@
-export default function ProfilePage() { 
-    return (
-        <div>
-            <h1> Pagina de perfil do usuario</h1>
-        </div>
+import getSession from "@/lib/getSession";
+import { redirect } from "next/navigation";
+import { getUserData } from "./_data-access/get-info-user";
+import { ProfileContent } from "./_components/profile";
+
+export default async function ProfilePage() {
+
+    const session = await getSession();
+
+  //protegendo a rota somnete para usuarios logados
+  if (!session) {
+    redirect("/");
+  }
+
+
+
+  const user = await getUserData({userId: session?.user?.id}); 
+  
+
+
+  if(!user){
+    redirect("/");
+  }
+
+    return (  // coponnete de perfil do usuario do  lado client 
+       <ProfileContent user={user} />
     )
 }

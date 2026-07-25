@@ -1,6 +1,18 @@
+import getSession from "@/lib/getSession";
+import { redirect } from "next/navigation";
 
 
-export default function Dashboard() {
+
+
+
+export default async function Dashboard() {
+  const session = await getSession();
+
+  // Sem sessão → volta para a home (protegendo o painel)
+  if (!session) {
+    redirect("/");
+  }
+ 
   return (
     <div>
       <h1>Pagina Dashboard</h1> 

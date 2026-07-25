@@ -97,13 +97,17 @@ export function Header() {
                 </nav>
 
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>  {/* estado para abrir e fechar o menu */}
-                    <SheetTrigger className="md:hidden">
-                        <Button className="text-black hover:bg-transparent cursor-pointer"
-                            variant="ghost"
-                            size="icon"
-                        >
-                            <Menu className="w-6 h-6" />
-                        </Button>
+                    <SheetTrigger
+                        className="md:hidden"
+                        render={
+                            <Button
+                                className="text-black hover:bg-transparent cursor-pointer"
+                                variant="ghost"
+                                size="icon"
+                            />
+                        }
+                    >
+                        <Menu className="w-6 h-6" />
                     </SheetTrigger>
 
                     <SheetContent side="right" className="w-240px sm:w-300px z-9999">
