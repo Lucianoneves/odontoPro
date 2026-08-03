@@ -95,7 +95,7 @@ model Subscription {
 
 
 
-model User {
+model User { // modelo de usuario 
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique

@@ -6,17 +6,17 @@ import  prisma  from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 
-const formSchema = z.object({
+const formSchema = z.object({ // esquema de validação para o formulario de serviço
     name: z.string().min(1, { message: "Nome é obrigatório" }),
     price: z.number().min(1, { message: "Preço é obrigatório" }),
     duration: z.number()
 })
 
 
-type FormSchema = z.infer<typeof formSchema>; 
+type FormSchema = z.infer<typeof formSchema>;  // tipo do formulario de serviço
 
 
-export async function createService(formData: FormSchema) { 
+export async function createService(formData: FormSchema) {  // função para criar um novo serviço
     const session = await auth()
 
 

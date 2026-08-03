@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionAuthProvider } from "@/components/session-auth"; 
 import { Toaster } from "sonner";
+import { QueryClientContext } from "@/providers/queryclient";
 
 
 const geistSans = Geist({
@@ -32,8 +33,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SessionAuthProvider>
-          <Toaster />           
-          {children}
+          <QueryClientContext>
+            <Toaster   
+             duration={2500} 
+             />        
+            {children}
+          </QueryClientContext>          
         </SessionAuthProvider>
       </body>
     </html>
