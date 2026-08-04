@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OdontoPro
 
-## Getting Started
+SaaS para gestão de clínicas odontológicas. Profissionais gerenciam agenda, serviços, perfil e assinaturas; pacientes agendam pela página pública da clínica.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19** + TypeScript
+- **PostgreSQL** + **Prisma 7**
+- **NextAuth v5** (login com GitHub)
+- **Stripe** (assinaturas / Checkout)
+- **Tailwind CSS 4** + shadcn/ui + Sonner
+
+## Funcionalidades
+
+### Área pública
+- Landing page com profissionais
+- Login com GitHub
+- Agendamento público em `/clinica/[id]` (data, horários e dados do paciente)
+
+### Painel da clínica (`/dashboard`)
+- **Agenda** — listar, filtrar por data e cancelar agendamentos
+- **Lembretes** — criar e gerenciar lembretes
+- **Serviços** — CRUD de serviços (nome, preço, duração)
+- **Perfil** — dados da clínica, telefone, endereço e horários
+- **Planos** — escolha de plano e checkout Stripe (Básico / Profissional)
+
+### Assinaturas (Stripe)
+- Criação de customer e sessão de Checkout
+- Planos `BASIC` e `PROFESSIONAL` via Price IDs no `.env`
+- Webhook em `/api/webhook` (eventos recebidos; persistência no banco em andamento)
+
+## Estrutura principal
+
+```text
+src/app/
+├── (public)/              # landing + agendamento público
+├── (panel)/dashboard/     # painel autenticado
+│   ├── services/
+│   ├── profile/
+│   ├── plans/
+│   └── _components/       # agenda, lembretes, sidebar
+└── api/
+    ├── auth/[...nextauth]/
+    ├── webhook/           # Stripe
+    ├── clinic/
+    └── schedule/
+```
+
+## Começando
+
+### Pré-requisitos
+
+- Node.js 20+
+- PostgreSQL (ex.: Neon)
+- Conta Stripe (modo teste)
+- App OAuth no GitHub
+
+### Instalação
+
+```bash
+npm install
+```
+
+Configure o banco e gere o client Prisma:
+
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+### Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+# Auth
+AUTH_SECRET=
+AUTH_GITHUB_ID=
+AUTH_GITHUB_SECRET=
+AUTH_URL=http://localhost:3000
+
+# App
+NEXT_PUBLIC_URL=http://localhost:3000
+DATABASE_URL=
+
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PLAN_BASIC=
+STRIPE_PLAN_PRO=
+STRIPE_SUCCESS_URL=http://localhost:3000/dashboard/plans?success=true
+STRIPE_CANCEL_URL=http://localhost:3000/dashboard/plans?cancel=true
+```
+
+### Rodar em desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Webhook Stripe (local)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Em outro terminal, com a [Stripe CLI](https://stripe.com/docs/stripe-cli) instalada:
 
-## Learn More
+```bash
+npm run stripe:listen
+```
 
-To learn more about Next.js, take a look at the following resources:
+Isso encaminha eventos para `localhost:3000/api/webhook`. Use o `whsec_...` gerado pela CLI em `STRIPE_WEBHOOK_SECRET`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Script | Descrição |
+|--------|-----------|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm start` | Servidor de produção |
+| `npm run stripe:listen` | Encaminha webhooks Stripe para o app local |
 
-## Deploy on Vercel
+## Planos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Plano | Limite de serviços | Uso |
+|-------|--------------------|-----|
+| **BASIC** | até 3 | Clínicas menores |
+| **PROFESSIONAL** | até 50 | Clínicas em crescimento |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Os Price IDs vêm de `STRIPE_PLAN_BASIC` e `STRIPE_PLAN_PRO`.
+
+## Status atual
+
+- [x] Auth GitHub + painel protegido
+- [x] Serviços, agenda, lembretes e perfil
+- [x] Página pública de agendamento
+- [x] Checkout Stripe (criação de sessão)
+- [ ] Webhook persistindo assinatura no banco
+- [ ] Portal do cliente Stripe (gerenciar/cancelar plano)
+
+## Licença
+
+Projeto privado — uso interno / educacional.

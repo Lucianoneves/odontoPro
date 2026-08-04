@@ -79,7 +79,7 @@ enum Plan{
 
 
 
-model Subscription {
+model Subscription { // modelo de assinaturas 
   id String @id @default(uuid())
   status String 
   plan String  

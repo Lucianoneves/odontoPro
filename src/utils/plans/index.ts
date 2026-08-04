@@ -1,57 +1,57 @@
-import { features } from "process"
-
+import type { Plan } from "@/generated/prisma/client";
 
 export type PlanDetailsProps = {
-    maxServices: number;
-}
+  maxServices: number;
+};
 
 export type PlansProps = {
-    BASIC: PlanDetailsProps;
-    PROFESSIONAL: PlanDetailsProps;
-}
+  BASIC: PlanDetailsProps;
+  PROFESSIONAL: PlanDetailsProps;
+};
 
+export type SubscriptionPlanItem = {
+  id: Plan;
+  name: string;
+  description: string;
+  oldPrice: string;
+  price: string;
+  features: string[];
+};
 
-export const  Plans: PlansProps = {  // planos de assinatura 
-    BASIC: { 
-        maxServices: 3,
- },
- PROFESSIONAL: { 
-    maxServices: 2,
- },
+export const Plans: PlansProps = {
+  BASIC: {
+    maxServices: 3,
+  },
+  PROFESSIONAL: {
+    maxServices: 50,
+  },
+};
 
-}
-
-
-export const subscriptionPlan=[
-    {
+export const subscriptionPlan: SubscriptionPlanItem[] = [
+  {
     id: "BASIC",
-    name:"BASIC",
-    description:" Peefeito para clinicas menores",
-    oldPrice: "R$ 100,00",
-    price:  "R$ 89.90",
+    name: "Básico",
+    description: "Perfeito para clínicas menores",
+    oldPrice: "100,00",
+    price: "32,90",
     features: [
-        ` Até ${Plans.BASIC.maxServices} serviços`,
-        `Agendamentos limitados`, 
-        ` Suporte`,
-        ` Relatorios`,
-
-    ]
-
-    }
-
-
-, {
+      `Até ${Plans.BASIC.maxServices} serviços`,
+      "Agendamentos limitados",
+      "Suporte por e-mail",
+      "Relatórios básicos",
+    ],
+  },
+  {
     id: "PROFESSIONAL",
-    name:"PROFESSIONAL",
-    description:" Peefeito para clinicas grandes",
-    oldPrice: "R$ 199,00",
-    price:  "R$ 149.90",
+    name: "Profissional",
+    description: "Perfeito para clínicas em crescimento",
+    oldPrice: "199,00",
+    price: "42,90",
     features: [
-        ` Até ${Plans.PROFESSIONAL.maxServices} serviços`,
-        `Agendamentos ilimitados`, 
-        ` Suporte prioritário`,
-        ` Relatorios com IA`,
-    ]
-
-    },
-]
+      `Até ${Plans.PROFESSIONAL.maxServices} serviços`,
+      "Agendamentos ilimitados",
+      "Suporte prioritário",
+      "Relatórios com IA",
+    ],
+  },
+];
