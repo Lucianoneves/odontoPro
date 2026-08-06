@@ -8,6 +8,7 @@ SaaS para gestão de clínicas odontológicas. Profissionais gerenciam agenda, s
 - **PostgreSQL** + **Prisma 7**
 - **NextAuth v5** (login com GitHub)
 - **Stripe** (assinaturas / Checkout)
+- **Cloudinary** (armazenamento de imagens; no banco fica só a URL)
 - **Tailwind CSS 4** + shadcn/ui + Sonner
 
 ## Funcionalidades
@@ -41,6 +42,7 @@ src/app/
 │   └── _components/       # agenda, lembretes, sidebar
 └── api/
     ├── auth/[...nextauth]/
+    ├── image/upload/      # Cloudinary → salva URL em User.image
     ├── webhook/           # Stripe
     ├── clinic/
     └── schedule/
@@ -91,7 +93,20 @@ STRIPE_PLAN_BASIC=
 STRIPE_PLAN_PRO=
 STRIPE_SUCCESS_URL=http://localhost:3000/dashboard/plans?success=true
 STRIPE_CANCEL_URL=http://localhost:3000/dashboard/plans?cancel=true
+
+# Cloudinary (imagem no Cloudinary; User.image = URL)
+CLOUDINARY_NAME=
+CLOUDINARY_KEY=
+CLOUDINARY_SECRET=
+CLOUDINARY_UPLOAD_PRESET=odontopro_avatars
 ```
+
+### Imagens (Cloudinary)
+
+- O arquivo é enviado para o Cloudinary via `POST /api/image/upload`.
+- No PostgreSQL / Prisma (`User.image`) salva-se **somente** a `secure_url`.
+- Crie um Upload Preset unsigned chamado `odontopro_avatars` em  
+  Cloudinary → Settings → Upload → Upload presets.
 
 ### Rodar em desenvolvimento
 
@@ -133,6 +148,7 @@ Os Price IDs vêm de `STRIPE_PLAN_BASIC` e `STRIPE_PLAN_PRO`.
 
 - [x] Auth GitHub + painel protegido
 - [x] Serviços, agenda, lembretes e perfil
+- [x] Avatar no Cloudinary (banco guarda só a URL)
 - [x] Página pública de agendamento
 - [x] Checkout Stripe (criação de sessão)
 - [ ] Webhook persistindo assinatura no banco

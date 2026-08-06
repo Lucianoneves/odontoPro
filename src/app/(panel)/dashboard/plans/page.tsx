@@ -2,8 +2,8 @@ import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GridPlans } from "./_components/grid-plans";
 import { getSubscription } from "@/utils/get-subscription";
-import { PlanCheckoutToast } from "./_components/plan-checkout-toast";
 import { SubscriptionDetail } from "./_components/subscription-detail";
+import { PlanCheckoutToast } from "./_components/plan-checkout-toast";
 
 interface PlansPageProps {
   searchParams: Promise<{
@@ -20,7 +20,7 @@ export default async function PlansPage({ searchParams }: PlansPageProps) {
   }
 
   const { success, cancel } = await searchParams;
-  const subscription = await getSubscription(session.user.id!);
+  const subscription = await getSubscription(session.user?.id! ?? "");
   const isActive = subscription?.status === "active";
 
   return (
@@ -31,16 +31,14 @@ export default async function PlansPage({ searchParams }: PlansPageProps) {
         <h1 className="text-2xl font-bold tracking-tight">Planos</h1>
         <p className="text-muted-foreground">
           {isActive
-            ? "Gerencie sua assinatura atual."
+            ? "Detalhes do seu plano ativo."
             : "Escolha o plano ideal para sua clínica e continue no checkout seguro do Stripe."}
         </p>
       </div>
 
+      {/* Assinatura ativa → só o plano contratado | Sem assinatura → cards para assinar */}
       {isActive ? (
-        <SubscriptionDetail
-          plan={subscription.plan}
-          status={subscription.status}
-        />
+        <SubscriptionDetail subscription={subscription} />
       ) : (
         <GridPlans />
       )}

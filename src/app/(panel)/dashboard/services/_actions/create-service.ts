@@ -41,7 +41,7 @@ export async function createService(formData: FormSchema) {  // função para cr
                 name: formData.name,
                 price: formData.price,
                 duration: formData.duration,
-                userId: session?.user.id
+                userId: session?.user?.id ?? ""
             }
         })
 

@@ -5,9 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": " prisma generate &&  npx prisma migrate deploy && next build", 
     "start": "next start",
-    "contract:emit": "prisma-next contract emit",
+    "postinstall": "prisma generate",
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhook"
   },
   "dependencies": {
@@ -21,6 +21,7 @@
     "@stripe/stripe-js": "^9.12.1",
     "@tanstack/react-query": "^5.101.4",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",

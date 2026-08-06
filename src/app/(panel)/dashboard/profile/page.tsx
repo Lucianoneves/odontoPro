@@ -14,7 +14,7 @@ export default async function ProfilePage() {
 
 
 
-  const user = await getUserData({userId: session?.user?.id}); 
+  const user = await getUserData({userId: session?.user?.id ?? ""}); 
   
 
 

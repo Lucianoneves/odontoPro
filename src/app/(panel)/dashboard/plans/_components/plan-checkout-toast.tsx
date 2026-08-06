@@ -14,8 +14,10 @@ export function PlanCheckoutToast({ success, cancel }: PlanCheckoutToastProps) {
 
   useEffect(() => {
     if (success === "true") {
-      toast.success("Pagamento iniciado com sucesso! Aguarde a confirmação.");
+      toast.success("Assinatura confirmada! Carregando seu plano...");
+      // Atualiza a página para buscar a assinatura no Stripe/banco
       router.replace("/dashboard/plans");
+      router.refresh();
     }
 
     if (cancel === "true") {

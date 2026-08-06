@@ -43,7 +43,7 @@ export async function updateProfile (formData: FormSchema){
    try { 
     await prisma.user.update({ // atualizando o perfil do usuario no banco de dados 
         where: {
-            id: session.user.id
+            id: session.user?.id ?? ""
         },
         data: {
             name: formData.name,

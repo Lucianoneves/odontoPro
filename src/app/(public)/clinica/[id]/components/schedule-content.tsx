@@ -5,6 +5,7 @@ import Image from "next/image";
 import imgTest from "../../../../../../public/doctor-hero.png";
 import { MapPinIcon } from "lucide-react";
 import { Prisma } from "@/generated/prisma/client";
+import { getValidImageSrc } from "@/utils/get-valid-image-src";
 import { useAppointmentForm, AppointmentFormData } from "./schedule-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -355,7 +356,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                     <article className="flex flex-col items-center mb-8">
                         <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white mb-4 shadow-md">
                             <Image
-                                src={clinic.image ? clinic.image : imgTest}
+                                src={getValidImageSrc(clinic.image) || imgTest}
                                 alt={clinic.name ?? "Foto da clinica"}
                                 className="object-cover"
                                 fill

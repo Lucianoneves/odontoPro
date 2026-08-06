@@ -17,7 +17,7 @@ export default async function ServicePage() {
 
 return (
     <Suspense fallback={<div>Carregando...</div>}>  
-        <ServiceContent  userId={session.user.id ?? ""}/>
+        <ServiceContent  userId={session.user?.id ?? ""}/>
     </Suspense>
 )
 
