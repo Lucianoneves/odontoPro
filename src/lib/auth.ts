@@ -3,12 +3,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import prisma from "./prisma"
 import Google from "next-auth/providers/google"
 import { isCustomCloudinaryAvatar } from "@/utils/get-valid-image-src"
-import { PrismaClient } from "@prisma/client"
 // Standby — descomente para reativar login GitHub:
 // import GitHub from "next-auth/providers/github"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma as unknown as PrismaClient),
+  // Client gerado em src/generated/prisma (não em @prisma/client)
+  adapter: PrismaAdapter(prisma as never),
   trustHost: true,
   providers: [
     Google({
