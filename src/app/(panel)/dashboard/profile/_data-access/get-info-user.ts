@@ -1,39 +1,36 @@
-"use server"
+"use server";
 
-import prisma from "@/lib/prisma";  
+import { unstable_noStore as noStore } from "next/cache";
+import prisma from "@/lib/prisma";
 
 interface getUserDataProps {
-    userId: string;
+  userId: string;
 }
 
+export async function getUserData({ userId }: getUserDataProps) {
+  noStore(); // sempre dados frescos (importante na Vercel)
 
-export async function getUserData ({userId}: getUserDataProps){
-    try{
-
-
-        if(!userId){
-           return null;
-        }
-
-          const user = await prisma.user.findFirst({
-            where: {
-                id: userId,
-            },
-            include: {
-                subscription: true,
-            },
-          });
-
-          if(!user){
-            return null;
-          }
-
-         
-          return user;
-
-
-    }catch(err){
-        console.log(err)
-        return null
+  try {
+    if (!userId) {
+      return null;
     }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        subscription: true,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  } catch (err) {
+    console.error("Erro ao buscar usuário:", err);
+    return null;
+  }
 }

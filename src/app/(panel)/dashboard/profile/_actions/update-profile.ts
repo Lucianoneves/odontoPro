@@ -41,9 +41,15 @@ export async function updateProfile (formData: FormSchema){
     }
 
    try { 
-    await prisma.user.update({ // atualizando o perfil do usuario no banco de dados 
+    const userId = session.user?.id;
+
+    if (!userId) {
+      return { error: "Usuário não autenticado" };
+    }
+
+    await prisma.user.update({
         where: {
-            id: session.user?.id ?? ""
+            id: userId
         },
         data: {
             name: formData.name,
@@ -56,15 +62,16 @@ export async function updateProfile (formData: FormSchema){
     })
 
     revalidatePath("/dashboard/profile");
-    revalidatePath(`/clinica/${session.user?.id ?? ""}`);
+    revalidatePath(`/clinica/${userId}`);
     revalidatePath("/dashboard");
 
     return{
         success: "Clinica atualizado com sucesso"
     }
    }catch(error){
+    console.error("Erro ao atualizar perfil:", error);
     return{
-        error: "Erro ao atualizar a clinica"
+        error: "Erro ao atualizar a clinica. Verifique o DATABASE_URL no Vercel."
     }
 
 

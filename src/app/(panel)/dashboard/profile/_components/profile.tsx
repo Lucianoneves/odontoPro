@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProfileFormData, useProfileForm } from "./profile-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -46,7 +46,19 @@ export function ProfileContent( {user}: ProfileContentProps) {
         phone: user.phone, 
         status: user.status, 
         timeZone: user.timeZone
-    });      
+    });
+
+    // Quando o servidor manda user atualizado (após refresh), sincroniza o formulário
+    useEffect(() => {
+      form.reset({
+        name: user.name || "",
+        address: user.address || "",
+        phone: user.phone || "",
+        status: user.status ? "active" : "inactive",
+        timeZone: user.timeZone || "",
+      });
+      setSelectedHours(user.times || []);
+    }, [user.id, user.updatedAt, user.name, user.address, user.phone, user.status, user.timeZone, user.times]);
 
 
 

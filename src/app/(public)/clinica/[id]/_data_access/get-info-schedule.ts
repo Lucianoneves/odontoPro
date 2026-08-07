@@ -1,39 +1,37 @@
-"use server"; 
+"use server";
 
+import { unstable_noStore as noStore } from "next/cache";
+import prisma from "@/lib/prisma";
 
+export async function getInfoSchedule(userId: string) {
+  noStore(); // página pública sempre atualizada
 
-import  prisma from "@/lib/prisma"; 
-
-
-export async function getInfoSchedule(userId: string) { 
-    try{
-        if(!userId) {
-            return null
+  try {
+    if (!userId) {
+      return null;
     }
 
-    const user = await prisma.user.findFirst ({ /* busco el usuario por su id */
-        where: {
-            id: userId 
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        subscription: true,
+        services: {
+          where: {
+            status: true,
+          },
         },
-        include: {
-            subscription: true,
-            services: {
-                where: {
-                    status: true
-                }
-            }
+      },
+    });
 
-            },
-        });  
+    if (!user) {
+      return null;
+    }
 
-        if(!user) { 
-            return null;
-        }
-
-        return user; 
-
-    }catch (error) { 
-        console.error("Erro ao buscar clinica:", error);
-        return null;
-    } 
+    return user;
+  } catch (error) {
+    console.error("Erro ao buscar clinica:", error);
+    return null;
+  }
 }
