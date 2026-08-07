@@ -108,6 +108,7 @@ export function ProfileContent( {user}: ProfileContentProps) {
       } 
 
       toast(response.success, {closeButton: true, style: {backgroundColor: "green", color: "white"}});
+      router.refresh();
       }
 
 

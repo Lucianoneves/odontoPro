@@ -5,6 +5,7 @@ import Image from "next/image";
 import semFoto from "../../../../../../public/foto1.png";
 import { Loader, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { updateProfileAvatar } from "../_actions/update-avatar-profile";
 import { useSession } from "next-auth/react";
 import { getValidImageSrc } from "@/utils/get-valid-image-src";
@@ -20,6 +21,7 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
   );
   const [loading, setLoading] = useState(false);
   const { update } = useSession();
+  const router = useRouter();
 
   async function uploadImage(image: File): Promise<string | null> {
     try {
@@ -88,6 +90,7 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
 
       setPreviewImage(urlImage);
       await update({ image: urlImage });
+      router.refresh();
       toast.success("Foto atualizada com sucesso");
     } finally {
       setLoading(false);

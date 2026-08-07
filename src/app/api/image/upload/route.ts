@@ -67,6 +67,8 @@ export const POST = async (request: Request) => {
     });
 
     revalidatePath("/dashboard/profile");
+    revalidatePath(`/clinica/${userId}`);
+    revalidatePath("/dashboard");
 
     return NextResponse.json({
       message: "Imagem enviada com sucesso",

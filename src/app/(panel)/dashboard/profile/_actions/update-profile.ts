@@ -55,7 +55,9 @@ export async function updateProfile (formData: FormSchema){
         }
     })
 
-    revalidatePath("/dashboard/profile"); // refazendo a pagina para atualizar o perfil do usuario 
+    revalidatePath("/dashboard/profile");
+    revalidatePath(`/clinica/${session.user?.id ?? ""}`);
+    revalidatePath("/dashboard");
 
     return{
         success: "Clinica atualizado com sucesso"
