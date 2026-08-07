@@ -17,7 +17,7 @@ export async function getAllServices({userId}: {userId: string}) { // funcao par
     const services = await prisma.service.findMany({ // Busca todos os servicos do usuario
         where: {
             userId: userId,
-            status: true,
+            status: true, 
         },
     });
 

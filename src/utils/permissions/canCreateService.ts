@@ -22,8 +22,10 @@ export async function canCreateService(
     const serviceCount = await prisma.service.count({
       where: {
         userId: session?.user?.id,
+        status: true, // Verifica se o serviço está ativo
       },
     });
+    
 
     if (subscription && subscription.status === "active") {
       const planLimits = await getPlan(

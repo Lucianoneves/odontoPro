@@ -33,7 +33,7 @@ export async function deleteService(formData: FormSchema) { // Função para del
 } 
 
 try {
-    await prisma.service.update({
+    await prisma.service.update({ // Atualiza o status do serviço para false
         where: { 
             id: formData.serviceId,
         userId: session.user.id,
@@ -43,7 +43,7 @@ try {
      }
     })
 
-    revalidatePath("/dashboard/services");
+    revalidatePath("/dashboard/services"); 
 
     return {
         data: "Serviço deletado com sucesso"
