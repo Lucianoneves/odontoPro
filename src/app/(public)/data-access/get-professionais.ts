@@ -1,22 +1,24 @@
-"use server"; 
+"use server";
 
-import prisma from "@/lib/prisma"; 
+import { unstable_noStore as noStore } from "next/cache";
+import prisma from "@/lib/prisma";
 
+export async function getProfessionais() {
+  noStore();
 
-export async function getProfessionais() { // função para buscar todos os profissionais
+  try {
+    const professionais = await prisma.user.findMany({
+      where: {
+        status: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
 
-    try{
-
-        const professionais = await prisma.user.findMany({ // busca todos os profissionais
-            where: {
-                status:true
-                 
-            }
-        })
-
-        return professionais;
-    }catch(error){ 
-        return [];
-
-}
+    return professionais;
+  } catch (error) {
+    console.error("Erro ao buscar profissionais:", error);
+    return [];
+  }
 }

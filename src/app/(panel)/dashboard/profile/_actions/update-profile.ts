@@ -64,6 +64,7 @@ export async function updateProfile (formData: FormSchema){
     revalidatePath("/dashboard/profile");
     revalidatePath(`/clinica/${userId}`);
     revalidatePath("/dashboard");
+    revalidatePath("/"); // home com lista de clínicas
 
     return{
         success: "Clinica atualizado com sucesso"

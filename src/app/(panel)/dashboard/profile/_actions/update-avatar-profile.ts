@@ -53,6 +53,7 @@ export async function updateProfileAvatar({
     revalidatePath("/dashboard/profile");
     revalidatePath(`/clinica/${session.user.id}`);
     revalidatePath("/dashboard");
+    revalidatePath("/");
 
     return { data: "Imagem alterada com sucesso" };
   } catch {
